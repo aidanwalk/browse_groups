@@ -4,7 +4,8 @@
 
 import numpy as np
 from astropy.io import fits
-# import argparse
+import argparse
+import sys
 
 
 
@@ -20,8 +21,16 @@ from bokeh.transform import linear_cmap
 
 
 # ─── Load data ────────────────────────────────────────────────────────
-fits_file = 'prepped_images.fits'
-membership_file = './prepped_images.clusterdat/frame_membership.txt'
+# add argument for input fits file and membership file from terminal (not optional)
+parser = argparse.ArgumentParser(description="Browse grouped FITS frames with Bokeh")
+parser.add_argument('--fits', type=str, default='prepped_images.fits', help='Path to the FITS file containing the frames')
+parser.add_argument('--membership', type=str, default='./prepped_images.clusterdat/frame_membership.txt', help='Path to the frame membership file')
+args = parser.parse_args()  
+
+
+
+fits_file = args._get_args()[0] if args.fits else 'prepped_images.fits'
+membership_file = args._get_args()[1] if args.membership else './prepped_images.clusterdat/frame_membership.txt'
 
 dat = fits.getdata(fits_file)                     # shape: (n_frames, height, width)
 frame_membership = np.genfromtxt(membership_file, dtype=int)  # Nx2: [frame_idx, group_idx]
