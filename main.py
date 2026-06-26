@@ -57,7 +57,9 @@ dat -= np.nanmin(dat, axis=(1,2))[:, None, None]  # shift to non-negative
 # dat /= np.nanmax(dat, axis=(1,2)).astype(np.uint16)[:, None, None]  # scale to [0,1]
 # dat = np.log10(dat)  # log scale for better contrast (adjust as needed)
 vmin = np.percentile(dat, 1) 
-vmax = np.percentile(dat, 99)
+# vmax = np.percentile(dat, 99)
+vmax = np.percentile(dat, 99.9)  # use 99.9 percentile to avoid outliers
+
 print(np.nanmax(dat), np.nanmin(dat), np.shape(np.nanmax(dat, axis=(1,2))))
 
 print(f"Loaded {dat.shape[0]} frames in {n_groups} groups")
